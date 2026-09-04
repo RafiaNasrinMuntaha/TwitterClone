@@ -5,42 +5,40 @@ namespace TwitterClone.Domain.Entities
     public enum NotificationType
     {
         Like,
+        Comment,
+        FriendRequest,
+        System,
         Retweet,
         Follow,
         Message
     }
 
-    public class Notification
+    public class Notification : BaseEntity
     {
-        public Guid Id { get; private set; }
-        public Guid RecipientId { get; private set; } // The user receiving the notification
-        public Guid TriggeredById { get; private set; } // The user who performed the action
-        public NotificationType Type { get; private set; }
-        public string Content { get; private set; } = string.Empty;
-        public bool IsRead { get; private set; }
-        public DateTime CreatedAt { get; private set; }
+        public Guid RecipientId { get; protected set; }
+        public Guid TriggeredById { get; protected set; }
+        public NotificationType Type { get; protected set; }
+        public string Content { get; protected set; } = string.Empty;
+        public bool IsRead { get; protected set; }
 
         protected Notification() { }
 
-        public Notification(Guid recipientId, Guid triggeredById, NotificationType type, string content)
+        protected Notification(Guid recipientId, Guid triggeredById, NotificationType type, string content, Guid createdBy)
+            : base(createdBy)
         {
             if (recipientId == Guid.Empty)
                 throw new ArgumentException("Recipient ID cannot be empty.", nameof(recipientId));
-
             if (triggeredById == Guid.Empty)
                 throw new ArgumentException("TriggeredBy ID cannot be empty.", nameof(triggeredById));
 
-            Id = Guid.NewGuid();
             RecipientId = recipientId;
             TriggeredById = triggeredById;
             Type = type;
             Content = content;
             IsRead = false;
-            CreatedAt = DateTime.UtcNow;
         }
 
-        // Domain method to mark notification as read
-        public void MarkAsRead()
+        public virtual void MarkAsRead()
         {
             IsRead = true;
         }

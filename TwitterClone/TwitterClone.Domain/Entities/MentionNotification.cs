@@ -2,13 +2,13 @@
 
 namespace TwitterClone.Domain.Entities
 {
-    public sealed class LikeNotification : Notification
+    public sealed class MentionNotification : Notification
     {
         public Guid TweetId { get; private set; }
 
-        private LikeNotification() { }
+        private MentionNotification() { }
 
-        public LikeNotification(Guid recipientId, Guid triggeredById, Guid tweetId, Guid createdBy)
+        public MentionNotification(Guid recipientId, Guid triggeredById, Guid tweetId, Guid createdBy)
             : base(recipientId, triggeredById, createdBy)
         {
             if (tweetId == Guid.Empty)
@@ -19,7 +19,7 @@ namespace TwitterClone.Domain.Entities
 
         public override string GetMessage()
         {
-            return $"User {TriggeredById} liked your tweet.";
+            return $"User {TriggeredById} mentioned you in a tweet.";
         }
     }
 }

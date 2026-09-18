@@ -10,10 +10,8 @@ namespace TwitterClone.Domain.Entities
         public Guid CreatedBy { get; protected set; }
         public Guid? ModifiedBy { get; protected set; }
 
-        // Parameterless constructor for ORM
         protected BaseEntity() { }
 
-        // Main constructor
         protected BaseEntity(Guid createdBy)
         {
             if (createdBy == Guid.Empty)
@@ -26,7 +24,6 @@ namespace TwitterClone.Domain.Entities
             ModifiedBy = null;
         }
 
-        // Optional: method to mark as modified
         public virtual void MarkAsModified(Guid modifiedBy)
         {
             if (modifiedBy == Guid.Empty)

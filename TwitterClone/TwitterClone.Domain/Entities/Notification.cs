@@ -2,45 +2,33 @@
 
 namespace TwitterClone.Domain.Entities
 {
-    public enum NotificationType
-    {
-        Like,
-        Comment,
-        FriendRequest,
-        System,
-        Retweet,
-        Follow,
-        Message
-    }
-
-    public class Notification : BaseEntity
+    public abstract class Notification : BaseEntity
     {
         public Guid RecipientId { get; protected set; }
         public Guid TriggeredById { get; protected set; }
-        public NotificationType Type { get; protected set; }
-        public string Content { get; protected set; } = string.Empty;
-        public bool IsRead { get; protected set; }
+        public bool IsRead { get; private set; }
 
+        // Parameterless constructor for ORM
         protected Notification() { }
 
-        protected Notification(Guid recipientId, Guid triggeredById, NotificationType type, string content, Guid createdBy)
+        protected Notification(Guid recipientId, Guid triggeredById, Guid createdBy)
             : base(createdBy)
         {
             if (recipientId == Guid.Empty)
                 throw new ArgumentException("Recipient ID cannot be empty.", nameof(recipientId));
-            if (triggeredById == Guid.Empty)
-                throw new ArgumentException("TriggeredBy ID cannot be empty.", nameof(triggeredById));
 
             RecipientId = recipientId;
             TriggeredById = triggeredById;
-            Type = type;
-            Content = content;
             IsRead = false;
         }
 
-        public virtual void MarkAsRead()
+        // Concrete method – shared by all notifications
+        public void MarkAsRead()
         {
             IsRead = true;
         }
+
+        // Abstract method – every child MUST implement this
+        public abstract string GetMessage();
     }
 }

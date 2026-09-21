@@ -2,10 +2,11 @@
 
 namespace TwitterClone.Domain.Entities
 {
-    public class Tweet : BaseEntity
+    public class Tweet : BaseEntity, ILikeable
     {
         public Guid AuthorId { get; private set; }
         public string Content { get; private set; } = string.Empty;
+        public bool IsDeleted { get; private set; }
 
         protected Tweet() { }
 
@@ -19,6 +20,19 @@ namespace TwitterClone.Domain.Entities
 
             AuthorId = authorId;
             Content = content;
+            IsDeleted = false;
+        }
+
+        // Implementation of ILikeable
+        public bool CanBeLiked()
+        {
+            // A tweet can be liked only if it is not deleted and has content
+            return !IsDeleted && !string.IsNullOrWhiteSpace(Content);
+        }
+
+        public void SoftDelete()
+        {
+            IsDeleted = true;
         }
 
         public void UpdateContent(string newContent, Guid modifiedBy)

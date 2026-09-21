@@ -15,10 +15,13 @@ namespace TwitterClone.Domain.Entities
         {
             if (senderId == Guid.Empty)
                 throw new ArgumentException("Sender ID cannot be empty.", nameof(senderId));
+
             if (receiverId == Guid.Empty)
                 throw new ArgumentException("Receiver ID cannot be empty.", nameof(receiverId));
+
             if (string.IsNullOrWhiteSpace(content))
                 throw new ArgumentException("Message content cannot be empty.", nameof(content));
+
             if (senderId == receiverId)
                 throw new InvalidOperationException("You cannot send a message to yourself.");
 

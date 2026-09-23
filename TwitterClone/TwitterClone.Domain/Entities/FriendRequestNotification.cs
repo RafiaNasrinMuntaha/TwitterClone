@@ -8,13 +8,22 @@ namespace TwitterClone.Domain.Entities
 
         private FriendRequestNotification() { }
 
-        public FriendRequestNotification(Guid recipientId, Guid triggeredById, Guid requestId, string content, Guid createdBy)
-            : base(recipientId, triggeredById, NotificationType.FriendRequest, content, createdBy)
+        public FriendRequestNotification(
+            Guid recipientId,
+            Guid triggeredById,
+            Guid requestId,
+            Guid createdBy)
+            : base(recipientId, triggeredById, createdBy)
         {
             if (requestId == Guid.Empty)
                 throw new ArgumentException("Request ID cannot be empty.", nameof(requestId));
 
             RequestId = requestId;
+        }
+
+        public override string GetMessage()
+        {
+            return $"User {TriggeredById} sent you a friend request.";
         }
     }
 }

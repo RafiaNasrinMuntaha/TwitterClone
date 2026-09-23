@@ -9,8 +9,8 @@ namespace TwitterClone.Domain.Entities
 
         private CommentNotification() { }
 
-        public CommentNotification(Guid recipientId, Guid triggeredById, Guid tweetId, Guid commentId, string content, Guid createdBy)
-            : base(recipientId, triggeredById, NotificationType.Comment, content, createdBy)
+        public CommentNotification(Guid recipientId, Guid triggeredById, Guid tweetId, Guid commentId, Guid createdBy)
+            : base(recipientId, triggeredById, createdBy)
         {
             if (tweetId == Guid.Empty)
                 throw new ArgumentException("Tweet ID cannot be empty.", nameof(tweetId));
@@ -19,6 +19,11 @@ namespace TwitterClone.Domain.Entities
 
             TweetId = tweetId;
             CommentId = commentId;
+        }
+
+        public override string GetMessage()
+        {
+            return $"User {TriggeredById} commented on your tweet.";
         }
     }
 }
